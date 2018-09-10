@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-07-15T09:55:31.170Z
+ * Date: 2018-09-10T21:14:44.359Z
  */
 
 var IN_BROWSER = typeof window !== 'undefined';
@@ -322,7 +322,7 @@ var assign = Object.assign || function assign(obj) {
   return obj;
 };
 
-var REGEXP_DECIMALS = /\.\d*(?:0|9){12}\d*$/i;
+var REGEXP_DECIMALS = /\.\d*(?:0|9){12}\d*$/;
 
 /**
  * Normalize decimal number.
@@ -2586,17 +2586,17 @@ var methods = {
     var element = this.element;
 
 
-    if (!getData(element, NAMESPACE)) {
+    if (!element[NAMESPACE]) {
       return this;
     }
+
+    element[NAMESPACE] = undefined;
 
     if (this.isImg && this.replaced) {
       element.src = this.originalUrl;
     }
 
     this.uncreate();
-    removeData(element, NAMESPACE);
-
     return this;
   },
 
@@ -3329,11 +3329,11 @@ var Cropper = function () {
       var tagName = element.tagName.toLowerCase();
       var url = void 0;
 
-      if (getData(element, NAMESPACE)) {
+      if (element[NAMESPACE]) {
         return;
       }
 
-      setData(element, NAMESPACE, this);
+      element[NAMESPACE] = this;
 
       if (tagName === 'img') {
         this.isImg = true;
@@ -3420,7 +3420,10 @@ var Cropper = function () {
 
       xhr.open('get', url);
       xhr.responseType = 'arraybuffer';
-      xhr.withCredentials = element.crossOrigin === 'use-credentials';
+      if (element.crossOrigin === 'use-credentials') {
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.withCredentials = true;
+      }
       xhr.send();
     }
   }, {

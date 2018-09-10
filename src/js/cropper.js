@@ -154,7 +154,10 @@ class Cropper {
 
     xhr.open('get', url);
     xhr.responseType = 'arraybuffer';
-    xhr.withCredentials = element.crossOrigin === 'use-credentials';
+    if (element.crossOrigin === 'use-credentials') {
+      xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+      xhr.withCredentials = true;
+    }
     xhr.send();
   }
 
