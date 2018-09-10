@@ -37,7 +37,6 @@
     "web"
   ],
   "scripts": {
-    "postinstall": "npm run build",
     "build": "npm run build:css && npm run build:js",
     "build:css": "postcss src/index.css -o dist/cropper.css --no-map",
     "build:js": "rollup -c",
